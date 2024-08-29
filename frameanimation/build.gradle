@@ -1,13 +1,14 @@
 plugins {
     id 'com.android.library'
+    id "maven-publish"
 }
 android {
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
-        compileSdk 28
+        compileSdk 31
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
@@ -35,4 +36,38 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
-apply from: rootProject.file('scripts/upload.gradle')
+//apply from: rootProject.file('scripts/upload.gradle')
+
+def loadProperties(filename) {
+    def propertiesFile = file(filename)
+    if (!propertiesFile.exists()) {
+        throw new IllegalArgumentException("Can't find the property file from $filename.")
+    }
+    Properties props = new Properties()
+    props.load(new FileInputStream(propertiesFile))
+    return props
+}
+
+def loadLibVersion() {
+    def props = loadProperties("$rootDir/version.properties")
+    return props["version"]
+}
+
+def libVersion = loadLibVersion()
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+
+                // You can then customize attributes of the publication as shown below.
+                groupId = "com.github.wangyung"
+                artifactId = "frameanimation"
+                version = libVersion
+            }
+        }
+    }
+}

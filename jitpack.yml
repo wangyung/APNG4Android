@@ -2,4 +2,4 @@ jdk:
   - openjdk17
 install:
    - echo "Running apng lib module only"
-   - ./gradlew :apng:assembleDebug :apng:publishReleasePublicationToMavenLocal
+   - ./gradlew :frameanimation:assembleRelease :apng:assembleRelease :frameanimation:publishReleasePublicationToMavenLocal :apng:publishReleasePublicationToMavenLocal 
