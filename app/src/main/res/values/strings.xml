@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Animation Demo</string>
+    <string name="play_rate">Play Rate:</string>
+    <string name="rate">Rate</string>
 </resources>

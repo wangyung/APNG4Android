@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -24,12 +25,16 @@ public class AnimationTestActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apnglib);
         LinearLayout linearLayout = findViewById(R.id.layout);
+        EditText rate = findViewById(R.id.rate);
         String[] files = getIntent().getStringArrayExtra("files");
         for (String assetFile : files) {
             ImageView imageView = new ImageView(this);
             Drawable drawable = null;
             if (assetFile.endsWith("png")) {
-                drawable = APNGDrawable.fromAsset(this, assetFile);
+                APNGDrawable apngDrawable = APNGDrawable.fromAsset(this, assetFile);
+                float playRate = Float.parseFloat(rate.getText().toString());
+                apngDrawable.setPlayRate(playRate);
+                drawable = apngDrawable;
             }
             if (assetFile.endsWith("webp")) {
                 drawable = WebPDrawable.fromAsset(this, assetFile);
