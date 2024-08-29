@@ -46,6 +46,7 @@ public abstract class FrameSeqDecoder<R extends Reader, W extends Writer> {
     private final Set<RenderListener> renderListeners = new HashSet<>();
     private final AtomicBoolean paused = new AtomicBoolean(true);
     private static final Rect RECT_EMPTY = new Rect();
+    private float playRate = 1.0f;
     private final Runnable renderTask = new Runnable() {
         @Override
         public void run() {
@@ -57,7 +58,7 @@ public abstract class FrameSeqDecoder<R extends Reader, W extends Writer> {
             }
             if (canStep()) {
                 long start = System.currentTimeMillis();
-                long delay = step();
+                long delay = (long)(step() / playRate);
                 long cost = System.currentTimeMillis() - start;
                 workerHandler.removeCallbacks(renderTask);
                 workerHandler.postDelayed(this, Math.max(0, delay - cost));
@@ -581,5 +582,12 @@ public abstract class FrameSeqDecoder<R extends Reader, W extends Writer> {
             }
             return size;
         }
+    }
+
+    public void setPlayRate(float rate) {
+        if (rate < 0.1 || rate > 10) {
+            throw new IllegalArgumentException("The rate must be between 0.1 and 10");
+        }
+        this.playRate = rate;
     }
 }

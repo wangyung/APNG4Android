@@ -124,6 +124,10 @@ public abstract class FrameAnimationDrawable<Decoder extends FrameSeqDecoder<?, 
         return frameSeqDecoder.isPaused();
     }
 
+    public void setPlayRate(float rate) {
+        frameSeqDecoder.setPlayRate(rate);
+    }
+
     @Override
     public void start() {
         if (this.frameSeqDecoder.isRunning()) {
